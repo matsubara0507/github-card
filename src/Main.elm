@@ -195,8 +195,8 @@ viewInfo model =
     in
     case model.info of
         Ok info ->
-            Debug.log "fetch" info
-                |> always (buildCard info)
+            -- (\a -> always a <| Debug.log "fetch" info) <|
+            buildCard info
 
         Err NoInput ->
             Html.div [] []
@@ -205,12 +205,12 @@ viewInfo model =
             alert "Err: invalid input"
 
         Err (HttpErr err) ->
-            Debug.log "error" err
-                |> always (alert "Err: can't fetch by GitHub")
+            -- (\a -> always a <| Debug.log "error" err) <|
+            alert "Err: can't fetch by GitHub"
 
         Err (JsonErr err) ->
-            Debug.log "error" err
-                |> always (alert "Err: can't decode JSON")
+            -- (\a -> always a <| Debug.log "error" err) <|
+            alert "Err: can't decode JSON"
 
 
 buildCard : GitHubInfo -> Html msg
