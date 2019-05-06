@@ -7679,6 +7679,7 @@ var elm$html$Html$Attributes$src = function (url) {
 };
 var elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
 var elm$html$Html$Attributes$style = elm$virtual_dom$VirtualDom$style;
+var elm$html$Html$Attributes$target = elm$html$Html$Attributes$stringProperty('target');
 var author$project$Main$buildRepoCard = function (repo) {
 	var border = A2(
 		elm$core$Maybe$withDefault,
@@ -7770,7 +7771,8 @@ var author$project$Main$buildRepoCard = function (repo) {
 						_List_fromArray(
 							[
 								elm$html$Html$Attributes$class('avatar float-left pr-2'),
-								elm$html$Html$Attributes$href(repo.url)
+								elm$html$Html$Attributes$href(repo.url),
+								elm$html$Html$Attributes$target('_blank')
 							]),
 						_List_fromArray(
 							[
@@ -7983,7 +7985,8 @@ var author$project$Main$buildUserCard = function (user) {
 						_List_fromArray(
 							[
 								elm$html$Html$Attributes$class('avatar float-left pr-2'),
-								elm$html$Html$Attributes$href(user.url)
+								elm$html$Html$Attributes$href(user.url),
+								elm$html$Html$Attributes$target('_blank')
 							]),
 						_List_fromArray(
 							[

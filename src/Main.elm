@@ -250,7 +250,8 @@ buildUserCard user =
                 ]
             ]
         , Html.div [ Attr.class "Box-row" ]
-            [ Html.a [ Attr.class "avatar float-left pr-2", Attr.href user.url ]
+            [ Html.a
+                [ Attr.class "avatar float-left pr-2", Attr.href user.url, Attr.target "_blank" ]
                 [ Octicons.markGithub <| Octicons.size 24 <| Octicons.defaultOptions ]
             , Html.div [] [ Html.text user.bio ]
             ]
@@ -280,7 +281,8 @@ buildRepoCard repo =
                 ]
             ]
         , Html.div [ Attr.class "Box-row d-flex text-uppercase" ]
-            [ Html.a [ Attr.class "avatar float-left pr-2", Attr.href repo.url ]
+            [ Html.a
+                [ Attr.class "avatar float-left pr-2", Attr.href repo.url, Attr.target "_blank" ]
                 [ Octicons.markGithub <| Octicons.size 24 <| Octicons.defaultOptions ]
             , Html.div [ Attr.class "pr-2 pl-2" ]
                 [ Html.strong [ Attr.class "pr-1" ] [ Html.text <| String.fromInt repo.starCnt ]
