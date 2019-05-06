@@ -6,7 +6,7 @@ import Json.Decode as Decode exposing (Decoder)
 
 type alias User =
     { login : String
-    , name : String
+    , name : Maybe String
     , avatar : String
     , url : String
     , followers : Int
@@ -32,7 +32,7 @@ decodeUser : Decoder User
 decodeUser =
     Decode.map8 User
         (Decode.field "login" Decode.string)
-        (Decode.field "name" Decode.string)
+        (Decode.field "name" <| Decode.maybe Decode.string)
         (Decode.field "avatar_url" Decode.string)
         (Decode.field "html_url" Decode.string)
         (Decode.field "followers" Decode.int)

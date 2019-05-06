@@ -228,7 +228,7 @@ buildUserCard user =
             [ Html.div []
                 [ Html.img [ Attr.class "avatar float-left pr-2", Attr.src <| user.avatar ++ "&s=48" ] []
                 , Html.div []
-                    [ Html.h3 [] [ Html.text user.name ]
+                    [ Html.h3 [] [ Html.text <| Maybe.withDefault user.login user.name ]
                     , Html.span [] [ Html.text ("@" ++ user.login) ]
                     ]
                 ]
