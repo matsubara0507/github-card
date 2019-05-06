@@ -5918,11 +5918,25 @@ var author$project$GitHub$User = F8(
 	function (login, name, avatar, url, followers, following, repoCnt, bio) {
 		return {avatar: avatar, bio: bio, followers: followers, following: following, login: login, name: name, repoCnt: repoCnt, url: url};
 	});
+var elm$json$Json$Decode$map = _Json_map1;
+var elm$json$Json$Decode$oneOf = _Json_oneOf;
+var elm$json$Json$Decode$succeed = _Json_succeed;
+var elm$json$Json$Decode$maybe = function (decoder) {
+	return elm$json$Json$Decode$oneOf(
+		_List_fromArray(
+			[
+				A2(elm$json$Json$Decode$map, elm$core$Maybe$Just, decoder),
+				elm$json$Json$Decode$succeed(elm$core$Maybe$Nothing)
+			]));
+};
 var author$project$GitHub$decodeUser = A9(
 	elm$json$Json$Decode$map8,
 	author$project$GitHub$User,
 	A2(elm$json$Json$Decode$field, 'login', elm$json$Json$Decode$string),
-	A2(elm$json$Json$Decode$field, 'name', elm$json$Json$Decode$string),
+	A2(
+		elm$json$Json$Decode$field,
+		'name',
+		elm$json$Json$Decode$maybe(elm$json$Json$Decode$string)),
 	A2(elm$json$Json$Decode$field, 'avatar_url', elm$json$Json$Decode$string),
 	A2(elm$json$Json$Decode$field, 'html_url', elm$json$Json$Decode$string),
 	A2(elm$json$Json$Decode$field, 'followers', elm$json$Json$Decode$int),
@@ -6044,9 +6058,7 @@ var elm$core$Task$perform = F2(
 			elm$core$Task$Perform(
 				A2(elm$core$Task$map, toMessage, task)));
 	});
-var elm$json$Json$Decode$map = _Json_map1;
 var elm$json$Json$Decode$map2 = _Json_map2;
-var elm$json$Json$Decode$succeed = _Json_succeed;
 var elm$virtual_dom$VirtualDom$toHandlerInt = function (handler) {
 	switch (handler.$) {
 		case 'Normal':
@@ -6219,7 +6231,6 @@ var author$project$Main$getCardElement = A2(
 	elm$browser$Browser$Dom$getElement('github-card'));
 var elm$browser$Browser$Navigation$load = _Browser_load;
 var elm$browser$Browser$Navigation$pushUrl = _Browser_pushUrl;
-var elm$core$Debug$log = _Debug_log;
 var elm$core$Maybe$withDefault = F2(
 	function (_default, maybe) {
 		if (maybe.$ === 'Just') {
@@ -6507,14 +6518,27 @@ var author$project$Main$initModel = F2(
 			_Utils_update(
 				url,
 				{fragment: elm$core$Maybe$Nothing, query: elm$core$Maybe$Nothing}));
-		if (target.$ === 'Nothing') {
-			return _Utils_Tuple2(
-				_Utils_update(
-					model,
-					{url: baseUrl}),
-				elm$core$Platform$Cmd$none);
+		var _n3 = _Utils_Tuple2(target, url.fragment);
+		if (_n3.a.$ === 'Nothing') {
+			if (_n3.b.$ === 'Nothing') {
+				var _n4 = _n3.a;
+				var _n5 = _n3.b;
+				return _Utils_Tuple2(
+					_Utils_update(
+						model,
+						{url: baseUrl}),
+					elm$core$Platform$Cmd$none);
+			} else {
+				var text = _n3.b.a;
+				return A2(
+					author$project$Main$update,
+					author$project$Main$FetchGitHub(text),
+					_Utils_update(
+						model,
+						{text: text, url: baseUrl}));
+			}
 		} else {
-			var text = target.a;
+			var text = _n3.a.a;
 			return A2(
 				author$project$Main$update,
 				author$project$Main$FetchGitHub(text),
@@ -6593,7 +6617,6 @@ var author$project$Main$update = F2(
 				if (msg.a.$ === 'Ok') {
 					var dom = msg.a.a;
 					var card = {height: dom.element.height, width: dom.element.width};
-					var _n3 = A2(elm$core$Debug$log, 'dom', dom);
 					return _Utils_Tuple2(
 						_Utils_update(
 							model,
@@ -7853,7 +7876,8 @@ var author$project$Main$buildUserCard = function (user) {
 										_List_Nil,
 										_List_fromArray(
 											[
-												elm$html$Html$text(user.name)
+												elm$html$Html$text(
+												A2(elm$core$Maybe$withDefault, user.login, user.name))
 											])),
 										A2(
 										elm$html$Html$span,
@@ -7989,6 +8013,7 @@ var elm$core$Basics$always = F2(
 	function (a, _n0) {
 		return a;
 	});
+var elm$core$Debug$log = _Debug_log;
 var author$project$Main$viewInfo = function (model) {
 	var alert = function (message) {
 		return A2(
@@ -8034,29 +8059,13 @@ var author$project$Main$viewInfo = function (model) {
 };
 var elm$html$Html$h2 = _VirtualDom_node('h2');
 var elm$html$Html$input = _VirtualDom_node('input');
-var elm$virtual_dom$VirtualDom$Normal = function (a) {
-	return {$: 'Normal', a: a};
-};
-var elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
-var elm$html$Html$Events$on = F2(
-	function (event, decoder) {
-		return A2(
-			elm$virtual_dom$VirtualDom$on,
-			event,
-			elm$virtual_dom$VirtualDom$Normal(decoder));
-	});
-var elm$html$Html$Events$onClick = function (msg) {
-	return A2(
-		elm$html$Html$Events$on,
-		'click',
-		elm$json$Json$Decode$succeed(msg));
-};
 var elm$html$Html$Events$alwaysStop = function (x) {
 	return _Utils_Tuple2(x, true);
 };
 var elm$virtual_dom$VirtualDom$MayStopPropagation = function (a) {
 	return {$: 'MayStopPropagation', a: a};
 };
+var elm$virtual_dom$VirtualDom$on = _VirtualDom_on;
 var elm$html$Html$Events$stopPropagationOn = F2(
 	function (event, decoder) {
 		return A2(
@@ -8107,12 +8116,11 @@ var author$project$Main$viewBody = F2(
 					_List_fromArray(
 						[
 							A2(
-							elm$html$Html$div,
+							elm$html$Html$a,
 							_List_fromArray(
 								[
 									elm$html$Html$Attributes$class('btn btn-sm btn-with-count'),
-									elm$html$Html$Events$onClick(
-									author$project$Main$FetchGitHub(model.text))
+									elm$html$Html$Attributes$href('#' + model.text)
 								]),
 							_List_fromArray(
 								[

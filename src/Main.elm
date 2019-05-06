@@ -74,13 +74,15 @@ initModel url model =
         baseUrl =
             Url.toString { url | query = Nothing, fragment = Nothing }
     in
-    case target of
-        Nothing ->
+    case ( target, url.fragment ) of
+        ( Nothing, Nothing ) ->
             ( { model | url = baseUrl }, Cmd.none )
 
-        Just text ->
-            update (FetchGitHub text)
-                { model | text = text, embed = True }
+        ( Just text, _ ) ->
+            update (FetchGitHub text) { model | text = text, embed = True }
+
+        ( _, Just text ) ->
+            update (FetchGitHub text) { model | text = text, url = baseUrl }
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -148,9 +150,9 @@ viewBody title model =
     Html.div [ Attr.class "container" ]
         [ Html.h2 [ Attr.class "pb-3" ] [ Html.text title ]
         , Html.div [ Attr.class "clearfix" ]
-            [ Html.div
+            [ Html.a
                 [ Attr.class "btn btn-sm btn-with-count"
-                , Event.onClick (FetchGitHub model.text)
+                , Attr.href ("#" ++ model.text)
                 ]
                 [ Html.text "Build" ]
             , Html.input
